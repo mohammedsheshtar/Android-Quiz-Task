@@ -58,7 +58,7 @@ fun Quiz(modifier: Modifier) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp),
+                .padding(25.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -74,8 +74,8 @@ fun Question(question: String, modifier: Modifier = Modifier) {
         text = question,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 10.dp),
-        style = MaterialTheme.typography.headlineSmall
+            .padding(10.dp),
+        style = MaterialTheme.typography.headlineMedium
     )
 }
 
@@ -171,5 +171,13 @@ fun WrongCirclePreview() {
 fun TrueFalseButtonsPreview() {
     ComposeTaskTheme {
         TrueFalseButtons()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NextQuestionButtonPreview() {
+    ComposeTaskTheme {
+        NextQuestionButton()
     }
 }
