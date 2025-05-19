@@ -80,16 +80,13 @@ fun Question(question: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TrueFalseButtons(
-    onTrueClick: () -> Unit = {},
-    onFalseClick: () -> Unit = {}
-) {
+fun TrueFalseButtons() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Button(
-            onClick = onTrueClick,
+            onClick = { } ,
             shape = CircleShape,
             modifier = Modifier
                 .weight(1f)
@@ -101,7 +98,7 @@ fun TrueFalseButtons(
         Spacer(modifier = Modifier.width(16.dp))
 
         Button(
-            onClick = onFalseClick,
+            onClick = { },
             shape = CircleShape,
             modifier = Modifier
                 .weight(1f)
@@ -113,9 +110,9 @@ fun TrueFalseButtons(
 }
 
 @Composable
-fun NextQuestionButton(onClick: () -> Unit = {}) {
+fun NextQuestionButton() {
     Button(
-        onClick = onClick,
+        onClick = { },
         shape = CircleShape,
         modifier = Modifier
             .fillMaxWidth()
