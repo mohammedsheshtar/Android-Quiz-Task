@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -115,9 +118,9 @@ fun QuizPage(modifier: Modifier = Modifier) {
                 )
             } else {
                 if (isCorrect) {
-                    AnswerCircle(text = stringResource(R.string.correct_answer), color = Color.Green)
+                    AnswerCircle(text = stringResource(R.string.correct_answer), color = Color.Green,  isCorrect)
                 } else {
-                    AnswerCircle(text = stringResource(R.string.wrong_answer), color = Color.Red)
+                    AnswerCircle(text = stringResource(R.string.wrong_answer), color = Color.Red, isCorrect)
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -210,21 +213,43 @@ fun NextQuestionButton(
 }
 
 @Composable
-fun AnswerCircle(text: String, color: Color) {
+fun AnswerCircle(text: String, color: Color, isCorrect: Boolean) {
+
+    val imageRes = if (isCorrect) R.drawable.correct_answer else R.drawable.wrong_answer
+    val imageSize = if (isCorrect) 350.dp else 230.dp
+    val imagePadding = if (isCorrect) 180.dp else 200.dp
+    val offsetX = if (isCorrect) 0.dp else 38.dp
+
     Box(
         modifier = Modifier
-            .size(180.dp)
-            .clip(CircleShape)
-            .background(color, shape = CircleShape),
+            .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = text,
-            fontSize = 20.sp,
-            color = Color.White
-        )
+        Image(
+            painter = painterResource(id = imageRes),
+            contentDescription = null,
+            modifier = Modifier
+                .padding(bottom = imagePadding)
+                .offset(x = offsetX)
+                .size(imageSize)
+                .align(Alignment.TopCenter))
+        Box(
+            modifier = Modifier
+                .size(180.dp)
+                .clip(CircleShape)
+                .background(color, shape = CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = text,
+                fontSize = 20.sp,
+                color = Color.White
+            )
+        }
     }
 }
+
+
 
 @Composable
 fun GameOverScreen(score: Int, total: Int, onRestart: () -> Unit) {
@@ -260,7 +285,7 @@ fun QuestionTextPreview() {
 @Composable
 fun CorrectCirclePreview() {
     ComposeTaskTheme {
-        AnswerCircle("Correct Answer", Color.Green)
+        AnswerCircle("Correct Answer", Color.Green, isCorrect = true)
     }
 }
 
@@ -268,7 +293,7 @@ fun CorrectCirclePreview() {
 @Composable
 fun WrongCirclePreview() {
     ComposeTaskTheme {
-        AnswerCircle("Wrong Answer", Color.Red)
+        AnswerCircle("Wrong Answer", Color.Red, isCorrect = false)
     }
 }
 
