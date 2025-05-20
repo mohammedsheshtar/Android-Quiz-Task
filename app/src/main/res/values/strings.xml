@@ -9,4 +9,11 @@
     <string name="quiz_complete">Quiz Complete!</string>
     <string name="score">You scored %s out of %s</string>
     <string name="restart_quiz">Restart Quiz</string>
+    <string-array name="quiz_questions">
+        <item>Android is an operating system.</item>
+        <item>Android is made by Apple</item>
+        <item>Kotlin is made by a Kuwaiti</item>
+        <item>Kotlin is supported in Intellij</item>
+    </string-array>
+
 </resources>

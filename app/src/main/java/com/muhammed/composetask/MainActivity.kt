@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -55,15 +56,17 @@ class MainActivity : ComponentActivity() {
 
 data class QuizQuestion(val text: String, val answer: Boolean)
 
-    val questionsList = listOf(
-        QuizQuestion("Android is an operating system.", true),
-        QuizQuestion("Android is made by Apple", false),
-        QuizQuestion("Kotlin is made by a Kuwaiti", false),
-        QuizQuestion("Kotlin is supported in Intellij", true)
-    )
-
 @Composable
 fun QuizPage(modifier: Modifier = Modifier) {
+    val questionsArray = stringArrayResource(id = R.array.quiz_questions)
+
+    val questionsList = listOf(
+        QuizQuestion(text = questionsArray[0], answer = true),
+        QuizQuestion(text = questionsArray[1], answer = false),
+        QuizQuestion(text = questionsArray[2], answer = false),
+        QuizQuestion(text = questionsArray[3], answer = true)
+    )
+
     var questionIndex by rememberSaveable { mutableIntStateOf(0) }
     var isAnswered by rememberSaveable { mutableStateOf(false) }
     var isCorrect by rememberSaveable { mutableStateOf(false) }
