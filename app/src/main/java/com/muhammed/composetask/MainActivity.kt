@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -111,9 +112,9 @@ fun QuizPage(modifier: Modifier = Modifier) {
                 )
             } else {
                 if (isCorrect) {
-                    AnswerCircle(text = "Correct Answer", color = Color.Green)
+                    AnswerCircle(text = stringResource(R.string.correct_answer), color = Color.Green)
                 } else {
-                    AnswerCircle(text = "Wrong Answer", color = Color.Red)
+                    AnswerCircle(text = stringResource(R.string.wrong_answer), color = Color.Red)
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -137,7 +138,7 @@ fun QuizPage(modifier: Modifier = Modifier) {
                             .fillMaxWidth()
                             .height(50.dp)
                     ) {
-                        Text("Results", fontSize = 19.sp)
+                        Text(stringResource(R.string.results), fontSize = 19.sp)
                     }
                 }
             }
@@ -173,7 +174,7 @@ fun TrueFalseButtons(
                 .weight(1f)
                 .height(50.dp)
         ) {
-            Text("True", fontSize = 20.sp)
+            Text(stringResource(R.string.True), fontSize = 20.sp)
         }
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -185,7 +186,7 @@ fun TrueFalseButtons(
                 .weight(1f)
                 .height(50.dp)
         ) {
-            Text("False", fontSize = 20.sp)
+            Text(stringResource(R.string.False), fontSize = 20.sp)
         }
     }
 }
@@ -201,7 +202,7 @@ fun NextQuestionButton(
             .fillMaxWidth()
             .height(50.dp)
     ) {
-        Text("Next Question", fontSize = 18.sp)
+        Text(stringResource(R.string.next_question), fontSize = 18.sp)
     }
 }
 
@@ -231,15 +232,15 @@ fun GameOverScreen(score: Int, total: Int, onRestart: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Quiz Complete!", fontSize = 32.sp)
+        Text(stringResource(R.string.quiz_complete), fontSize = 32.sp)
         Spacer(modifier = Modifier.height(16.dp))
-        Text("You scored $score out of $total", fontSize = 24.sp)
+        Text(stringResource(R.string.score, score, total), fontSize = 24.sp)
         Spacer(modifier = Modifier.height(32.dp))
         Button(
             onClick = onRestart,
             shape = CircleShape
         ) {
-            Text("Restart Quiz", fontSize = 18.sp)
+            Text(stringResource(R.string.restart_quiz), fontSize = 18.sp)
         }
     }
 }

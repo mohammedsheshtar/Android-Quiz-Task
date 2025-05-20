@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">composeTask</string>
+    <string name="correct_answer">Correct Answer</string>
+    <string name="wrong_answer">Wrong Answer</string>
+    <string name="results">Results</string>
+    <string name="True">True</string>
+    <string name="False">False</string>
+    <string name="next_question">Next Question</string>
+    <string name="quiz_complete">Quiz Complete!</string>
+    <string name="score">You scored %s out of %s</string>
+    <string name="restart_quiz">Restart Quiz</string>
 </resources>
