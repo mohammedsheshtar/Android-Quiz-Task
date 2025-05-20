@@ -23,6 +23,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,15 +45,43 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComposeTaskTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Quiz(modifier = Modifier.padding(innerPadding))
+                    QuizPage(modifier = Modifier.padding(innerPadding))
                     }
                 }
             }
         }
     }
 
+data class QuizQuestion(val text: String, val answer: Boolean)
+
+    val questionsList = listOf(
+        QuizQuestion("Android is an operating system.", true),
+        QuizQuestion("Android is made by Apple", false),
+        QuizQuestion("Kotlin is made by a Kuwaiti", false),
+        QuizQuestion("Kotlin is supported in Intellij", true)
+    )
+
 @Composable
-fun Quiz(modifier: Modifier) {
+fun QuizPage(modifier: Modifier = Modifier) {
+    var questionIndex by rememberSaveable { mutableIntStateOf(0) }
+    var isAnswered by rememberSaveable { mutableStateOf(false) }
+    var isCorrect by rememberSaveable { mutableStateOf(false) }
+    var score by rememberSaveable { mutableIntStateOf(0) }
+    var gameOver by rememberSaveable { mutableStateOf(false) }
+
+    if (gameOver) {
+        GameOverScreen(score, questionsList.size){
+            score = 0
+            isAnswered = false
+            isCorrect = false
+            gameOver = false
+            questionIndex = 0
+        }
+        return
+    }
+
+    val currentQuestion = questionsList[questionIndex]
+
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -62,8 +95,52 @@ fun Quiz(modifier: Modifier) {
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Question(question = "Android is an operating system.")
-            TrueFalseButtons()
+            Question(question = currentQuestion.text)
+            if (!isAnswered) {
+                TrueFalseButtons(
+                    onTrueClick = {
+                        isAnswered = true
+                        isCorrect = currentQuestion.answer == true
+                        if (isCorrect) score++
+                    },
+                    onFalseClick = {
+                        isAnswered = true
+                        isCorrect = currentQuestion.answer == false
+                        if (isCorrect) score++
+                    }
+                )
+            } else {
+                if (isCorrect) {
+                    AnswerCircle(text = "Correct Answer", color = Color.Green)
+                } else {
+                    AnswerCircle(text = "Wrong Answer", color = Color.Red)
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                if (questionIndex < questionsList.lastIndex) {
+                    NextQuestionButton(
+                        onClick = {
+                                questionIndex++
+                                isAnswered = false
+                                isCorrect = false
+                        }
+                    )
+                }
+                else {
+                    Button(
+                        onClick = {
+                            gameOver = true
+                        },
+                        shape = CircleShape,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp)
+                    ) {
+                        Text("Results", fontSize = 19.sp)
+                    }
+                }
+            }
         }
     }
 }
@@ -75,18 +152,22 @@ fun Question(question: String, modifier: Modifier = Modifier) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp),
+        fontSize = 30.sp,
         style = MaterialTheme.typography.headlineMedium
     )
 }
 
 @Composable
-fun TrueFalseButtons() {
+fun TrueFalseButtons(
+    onTrueClick: () -> Unit = {},
+    onFalseClick: () -> Unit = {}
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Button(
-            onClick = { } ,
+            onClick = onTrueClick ,
             shape = CircleShape,
             modifier = Modifier
                 .weight(1f)
@@ -98,7 +179,7 @@ fun TrueFalseButtons() {
         Spacer(modifier = Modifier.width(16.dp))
 
         Button(
-            onClick = { },
+            onClick = onFalseClick,
             shape = CircleShape,
             modifier = Modifier
                 .weight(1f)
@@ -110,9 +191,11 @@ fun TrueFalseButtons() {
 }
 
 @Composable
-fun NextQuestionButton() {
+fun NextQuestionButton(
+    onClick: () -> Unit = {}
+) {
     Button(
-        onClick = { },
+        onClick = onClick,
         shape = CircleShape,
         modifier = Modifier
             .fillMaxWidth()
@@ -139,11 +222,33 @@ fun AnswerCircle(text: String, color: Color) {
     }
 }
 
+@Composable
+fun GameOverScreen(score: Int, total: Int, onRestart: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("Quiz Complete!", fontSize = 32.sp)
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("You scored $score out of $total", fontSize = 24.sp)
+        Spacer(modifier = Modifier.height(32.dp))
+        Button(
+            onClick = onRestart,
+            shape = CircleShape
+        ) {
+            Text("Restart Quiz", fontSize = 18.sp)
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun QuestionTextPreview() {
     ComposeTaskTheme {
-        Question("Is Kotlin used for Android development?")
+        Question("Android is an operating system.")
     }
 }
 
